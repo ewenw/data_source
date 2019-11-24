@@ -7,20 +7,30 @@ chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
   let info = getInfo(url, draw);
 });
 
-function draw(info) {
+let images = [
+  'data_center.jpg',
+  'coal_plant.jpg',
+  'data_center.jpg'
+];
+
+let slides = [];
+// A slide is a [text, image]
+function makeSlides(info) {
   if (info['hostName'])
-    $("#host").html(info['hostName']);
+    slides.push([info['hostName'], images[0]]);
   if (info['serviceCount'])
-    $("#services").html(info['serviceCount'] + " services");
+    slides.push([info['serviceCount'] + " services", images[1]]);
   if (info['contentDeliverers'].length) 
-    $("#contentDeliverers").html("Content deliverers: " + readableList(info['contentDeliverers']));
+    slides.push(["Content deliverers: " + readableList(info['contentDeliverers']), images[1]]);
   if (info['trackers'] && info['trackers'].length) 
+
+    slides.push("Trackers found: " + readableList(info['trackers']);
     $("#trackers").html("Trackers found: " + readableList(info['trackers']));
   $('.info').fadeIn(1000);
 }
 
 function getInfo(url, cb) {
-  let info = {};
+  let info = [];
   get("https://builtwith.com/" + url, (page) => {
     let serviceCount = $(page).find(".row .mb-2 .mt-2").length;
     

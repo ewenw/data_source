@@ -6,12 +6,21 @@
     <script src="popup.js"></script>
     <link rel="stylesheet" type="text/css" href="slideshow.css">
     <style>
+      #background {
+        width: 650px;
+        height: 400px;
+        margin: auto;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
       .color {
-        background: rgb(87, 255, 213, 0.2);
+        background: rgba(10, 53, 42, 0.788);
       }
       .content {
-        height: 200px;
-        width: 500px;
+        width: 100%;
+        height: 20%;
+        position: absolute;
+        top: 40%;
       }
       .info {
         text-align: center;
@@ -19,33 +28,31 @@
         height: 100%;
         display: none;
       }
-      p {
-
+      #text {
+        color: white;
+        font-size: large;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 65px;
+      }
+      .dot-dot-dot {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
       }
     </style>
   </head>
   <body id="background">
     <div class="content color">
+        <a id="prev">&#10094;</a>
+        <a id="next">&#10095;</a>
       <div class="info">
-        <p id="host"></p>
-        <p id="services"></p>
-        <p id="contentDeliverers"></p>
-        <p id="trackers"></p>
-        <div class="slideshow-container">
-          <a id="prev">&#10094;</a>
-          <a id="next">&#10095;</a>
-        </div>
-        <br>
-
-        <div style="text-align:center">
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        </div>
-        
-        <script src="slideshow.js"></script>
-        <div></div>
+        <div id="text"></p>
       </div>
     </div>
+    <div class="dot-dot-dot"></div>
+    
+    <div></div>
+    <script src="slideshow.js"></script>
   </body>
 </html>

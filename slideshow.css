@@ -23,6 +23,7 @@
   transition: 0.2s ease;
   border-radius: 0 3px 3px 0;
   user-select: none;
+  margin-top: 25px;
 }
 
 /* Position the "next button" to the right */

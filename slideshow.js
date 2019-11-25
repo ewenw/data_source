@@ -5,24 +5,30 @@ function plusSlides(n) {
 }
 
 function setImage(imagePath) {
+  $('#background').css('display', 'none');
   $('#background').css('background-image', 'url(images/background/' + imagePath + ')');
+  $('#background').fadeIn(200);
+}
+
+function setText(text) {
+  $('#text').text(text);
+  $('.info').fadeIn(200);
 }
 
 function showSlides(n) {
-  var i;
-  if (n > images.length-1 || n < 0)
+  if (n > slides.length-1 || n < 0)
     return;
   var dots = document.getElementsByClassName("dot");
-  slideIndex = n;
   
-  for (i = 0; i < dots.length; i++) {
+  for (let i = 0; i < dots.length; i++) {
       dots[i].className = dots[i].className.replace(" active", "");
   }
 
-  dots[slideIndex].className += " active";
-  setImage(images[slideIndex]);
+  dots[n].className += " active";
+  setText(slides[n][0]);
+  setImage(slides[n][1]);
+  slideIndex = n;
 }
-showSlides(slideIndex);
 
 
 

@@ -2,9 +2,11 @@
 
 
 
+
+let slides = [];
 chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
   let url = stripUrl(tabs[0].url);
-  let info = getInfo(url, draw);
+  getInfo(url, makeSlides);
 });
 
 let images = [
@@ -13,20 +15,21 @@ let images = [
   'data_center.jpg'
 ];
 
-let slides = [];
 // A slide is a [text, image]
-function makeSlides(info) {
+function makeSlides(info, url) {
   if (info['hostName'])
-    slides.push([info['hostName'], images[0]]);
+    slides.push([url + " is hosted on " + info['hostName'] + ".", images[0]]);
   if (info['serviceCount'])
-    slides.push([info['serviceCount'] + " services", images[1]]);
+    slides.push(["It is powered by " + info['serviceCount'] + " external services.", images[1]]);
   if (info['contentDeliverers'].length) 
-    slides.push(["Content deliverers: " + readableList(info['contentDeliverers']), images[1]]);
-  if (info['trackers'] && info['trackers'].length) 
+    slides.push(["The content is delivered by " + readableList(info['contentDeliverers']) + ".", images[2]]);
+  if (info['trackers'] && info['trackers'].length)
+    slides.push(["It uses: " + readableList(info['trackers']) + " to track your activity.", images[2]]);
 
-    slides.push("Trackers found: " + readableList(info['trackers']);
-    $("#trackers").html("Trackers found: " + readableList(info['trackers']));
-  $('.info').fadeIn(1000);
+  for(let i=0; i<slides.length; i++)
+    $('.dot-dot-dot').append('<span class="dot"></span>');
+
+  showSlides(slideIndex);
 }
 
 function getInfo(url, cb) {
@@ -54,7 +57,7 @@ function getInfo(url, cb) {
       info['hostName'] = hostName;
 
 
-      cb(info);
+      cb(info, url);
     });
   });
 }

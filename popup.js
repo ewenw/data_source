@@ -15,10 +15,25 @@ let images = [
   'data_center.jpg'
 ];
 
+const hostInfo = {
+  'amazon': ['Amazon Web Services (AWS), the largest cloud service provider in the world, is 50% renewable as of 2019.', images[0]],
+  'facebook': ['70%']
+};
+  
+function makeHostSlide(host, url) {
+  const text = url + " is hosted on " + host + "."
+  slides.push([text, images[0]]);
+  const hostKey = host.toLowerCase().replace(/\W+/g," ").split(" ")[0];
+  alert(hostKey);
+  if(hostKey in hostInfo){
+    slides.push(hostInfo[hostKey]);
+  }
+}
+
 // A slide is a [text, image]
 function makeSlides(info, url) {
   if (info['hostName'])
-    slides.push([url + " is hosted on " + info['hostName'] + ".", images[0]]);
+    makeHostSlide(info['hostName'], url);
   if (info['serviceCount'])
     slides.push(["It is powered by " + info['serviceCount'] + " external services.", images[1]]);
   if (info['contentDeliverers'].length) 

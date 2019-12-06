@@ -3,7 +3,6 @@
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     
-    <script src="popup.js"></script>
     <link rel="stylesheet" type="text/css" href="slideshow.css">
     <style>
       #background {
@@ -12,9 +11,6 @@
         margin: auto;
         background-repeat: no-repeat;
         background-size: cover;
-      }
-      .color {
-        background: rgba(10, 53, 42, 0.788);
       }
       .content {
         width: 100%;
@@ -29,30 +25,34 @@
         display: none;
       }
       #text {
-        color: white;
+        color: black;
         font-size: large;
         text-align: center;
         vertical-align: middle;
         line-height: 65px;
+        line-height: 24px;
       }
       .dot-dot-dot {
         position: fixed;
         bottom: 0;
         left: 50%;
       }
+      a {
+        text-shadow: 2px 2px 5px green;
+      }
     </style>
   </head>
   <body id="background">
-    <div class="content color">
+    <div class="content">
         <a id="prev">&#10094;</a>
         <a id="next">&#10095;</a>
-      <div class="info">
-        <div id="text"></p>
-      </div>
+        <center>
+      <span class="color" id="text"></p></center>
     </div>
     <div class="dot-dot-dot"></div>
     
     <div></div>
     <script src="slideshow.js"></script>
+    <script src="popup.js"></script>
   </body>
 </html>

@@ -6,45 +6,71 @@
 let slides = [];
 chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
   let url = stripUrl(tabs[0].url);
-  getInfo(url, makeSlides);
+  if (url == 'newtab')
+    makeNewTabSlides();
+  else
+    getInfo(url, makeSlides);
+  
+  
 });
 
-let images = [
-  'data_center.jpg',
-  'coal_plant.jpg',
-  'data_center.jpg'
-];
+function makeNewTabSlides() {
+  slides = slides.concat([
+    ['Data centers globally account for 3% of electricity supply and 2% of greenhouse emissions.', 'coal_plant'],
+    ['', 'data_distribution', 'rgba(0,0,0,0)'],
+    ["By 2023, China's data centers will consume more power than Australia.", 'beijing_skyline'],
+    ["China's data centers: 73% coal, 23% renewables, 4% nuclear.", 'beijing_skyline'],
+    ["Transitioning renewable energy from 23% to 30% saves 16 million metric tons of CO2", 'beijing_skyline'], 
+    ["That's equal to 10 million round-trip transatlantic flights", 'timelapse'],
+    ["Current issues: slow adoption of consistent metrics, lack of transparency and awareness", 'coal_plant']
+  ]);
+  showSlides(slideIndex);
+}
 
 const hostInfo = {
-  'amazon': ['Amazon Web Services (AWS), the largest cloud service provider in the world, is 50% renewable as of 2019.', images[0]],
-  'facebook': ['70%']
+  'amazon': {
+    'a': ['Amazon Web Services (AWS) is the largest cloud service provider in the world.', 'aws_logo'],
+    'b': ['It spans 114 points of presence in 56 cities and 24 countries', 'aws_map'],
+    'c': ['Despite heavy investments in wind farms, it is still only 40% renewable.', 'windmill_under_construction'],
+    'd': ['14 AWS facilities in Virginia are 97% powered by coal, nuclear, and natural gas.', 'coal_plant_virginia']
+   },
+  'google': {
+    'a': ['Google is the first tech giant to go 100% renewable', 'google_finland'],
+    'b': ['It collects rainwaters to cool its data centers', 'google_cooling'],
+    'c': ['And develops centers in colder regions like Belgium...', 'google_belgium'],
+    'd': ['Finland...', 'google_finland_2'],
+    'e': ['And The Netherlands...', 'google_netherlands'],
+    'f': ['Machine learning optimizations reduce its cooling energy by 40%.', 'google_ml'],
+    'g': ['Data centers are becoming increasingly power efficient', 'google_pue']
+  }
 };
   
-function makeHostSlide(host, url) {
-  const text = url + " is hosted on " + host + "."
-  slides.push([text, images[0]]);
+function makeHostSlide(host, nameOfWebsite) {
+  const text = nameOfWebsite + " is hosted on " + host + ".";
+  slides.push([text, 'data_center']);
   const hostKey = host.toLowerCase().replace(/\W+/g," ").split(" ")[0];
-  alert(hostKey);
   if(hostKey in hostInfo){
-    slides.push(hostInfo[hostKey]);
+    $.each(hostInfo[hostKey], function(k, v) {
+      slides.push(v);
+    });
   }
+  showSlides(slideIndex);
 }
 
 // A slide is a [text, image]
 function makeSlides(info, url) {
+  const nameOfWebsite = url.replace('www.', '');
+  if (info['hostName'] == "Unknown") 
+    return makeNewTabSlides();
   if (info['hostName'])
-    makeHostSlide(info['hostName'], url);
+    makeHostSlide(info['hostName'], nameOfWebsite);
   if (info['serviceCount'])
-    slides.push(["It is powered by " + info['serviceCount'] + " external services.", images[1]]);
+    slides.push([nameOfWebsite + " is powered by " + info['serviceCount'] + " external services.", 'microservices']);
   if (info['contentDeliverers'].length) 
-    slides.push(["The content is delivered by " + readableList(info['contentDeliverers']) + ".", images[2]]);
+    slides.push(["The content is delivered by " + readableList(info['contentDeliverers']) + ".", 'contentdelivery']);
   if (info['trackers'] && info['trackers'].length)
-    slides.push(["It uses: " + readableList(info['trackers']) + " to track your activity.", images[2]]);
+    slides.push(["It uses " + readableList(info['trackers']) + " to track your activity.", 'trackers']);
 
-  for(let i=0; i<slides.length; i++)
-    $('.dot-dot-dot').append('<span class="dot"></span>');
-
-  showSlides(slideIndex);
 }
 
 function getInfo(url, cb) {
@@ -138,5 +164,5 @@ function readableList(arr) {
   if (arr.length <= 3)
     return arr.join(", ")
   
-  return arr.slice(0, 2) + " and " + arr.length + " others";
+  return arr.slice(0, 2).join(", ") + " and " + arr.length + " others";
 }

@@ -16,41 +16,57 @@ chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
 
 function makeNewTabSlides() {
   slides = slides.concat([
+    ['Thank you for installing the DataSource extension.', ''],
     ['Data centers globally account for 3% of electricity supply and 2% of greenhouse emissions.', 'coal_plant'],
-    ['', 'data_distribution', 'rgba(0,0,0,0)'],
-    ["By 2023, China's data centers will consume more power than Australia.", 'beijing_skyline'],
-    ["China's data centers: 73% coal, 23% renewables, 4% nuclear.", 'beijing_skyline'],
-    ["Transitioning renewable energy from 23% to 30% saves 16 million metric tons of CO2", 'beijing_skyline'], 
-    ["That's equal to 10 million round-trip transatlantic flights", 'timelapse'],
-    ["Current issues: slow adoption of consistent metrics, lack of transparency and awareness", 'coal_plant']
+    ['Despite the industry leading the effort to transition into renewables, there are currently some issues:', 'coal_plant'],
+    ['Slow adoption of consistent metrics...', 'coal_plant'],
+    ["Lack of transparency...", 'coal_plant'],
+    ["And lack of awareness...", 'coal_plant'],
+    ['Small data centers account for the largest portion of energy consumption.', 'data_distribution']
   ]);
   showSlides(slideIndex);
 }
 
+const chinaSlides = {
+  'a': ["By 2023, China's data centers will consume more power than Australia.", 'beijing_skyline'],
+  'b': ["China's data centers: 73% coal, 23% renewables, 4% nuclear.", 'beijing_skyline'],
+  'c': ["Transitioning renewable energy from 23% to 30% saves 16 million metric tons of CO2", 'beijing_skyline'], 
+  'd': ["That's equal to 10 million round-trip transatlantic flights", 'timelapse']
+}
 const hostInfo = {
   'amazon': {
     'a': ['Amazon Web Services (AWS) is the largest cloud service provider in the world.', 'aws_logo'],
     'b': ['It spans 114 points of presence in 56 cities and 24 countries', 'aws_map'],
-    'c': ['Despite heavy investments in wind farms, it is still only 40% renewable.', 'windmill_under_construction'],
+    'c': ['Despite heavy investments in wind farms, it is still only 40% renewable.', 'windmill_under_construction', 'rgba(255,100,100,75)'],
     'd': ['14 AWS facilities in Virginia are 97% powered by coal, nuclear, and natural gas.', 'coal_plant_virginia']
    },
   'google': {
-    'a': ['Google is the first tech giant to go 100% renewable', 'google_finland'],
+    'a': ['Google is the first tech giant to go 100% renewable', 'google_finland', 'rgba(100,255,100,75)'],
     'b': ['It collects rainwaters to cool its data centers', 'google_cooling'],
     'c': ['And develops centers in colder regions like Belgium...', 'google_belgium'],
     'd': ['Finland...', 'google_finland_2'],
     'e': ['And The Netherlands...', 'google_netherlands'],
-    'f': ['Machine learning optimizations reduce its cooling energy by 40%.', 'google_ml'],
-    'g': ['Data centers are becoming increasingly power efficient', 'google_pue']
-  }
+    'f': ['Machine learning optimizations reduce its cooling energy by 40%.', 'google_ml', 'rgba(100,255,100,75)'],
+    'g': ['Data centers are becoming increasingly power efficient', 'google_pue', 'rgba(100,255,100,75)']
+  },
+  'tencent.com': chinaSlides,
+  'alibaba.com': chinaSlides
 };
   
 function makeHostSlide(host, nameOfWebsite) {
   const text = nameOfWebsite + " is hosted on " + host + ".";
   slides.push([text, 'data_center']);
-  const hostKey = host.toLowerCase().replace(/\W+/g," ").split(" ")[0];
+  let hostKey = host.toLowerCase().replace(/\W+/g," ").split(" ")[0];
   if(hostKey in hostInfo){
     $.each(hostInfo[hostKey], function(k, v) {
+      slides.push(v);
+    });
+
+    showSlides(slideIndex);
+    return;
+  }
+  if(nameOfWebsite in hostInfo){
+    $.each(hostInfo[nameOfWebsite], function(k, v) {
       slides.push(v);
     });
   }
